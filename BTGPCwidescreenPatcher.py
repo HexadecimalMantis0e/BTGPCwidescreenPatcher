@@ -3,7 +3,7 @@ import struct
 import argparse
 
 # Bionicle: The Game PC widescreen patcher
-# Currently only supports the version that runs on win10:
+# Currently only supports the version that runs on Windows 10:
 
 parser = argparse.ArgumentParser()
 parser.add_argument("executable", help = "BIONICLE.exe")
@@ -26,19 +26,18 @@ aspectRatio = {
     "3x16:9": 0x40AAAAAB
 }
 
-f0 = open(args.executable,"r+b")
+f0 = open(args.executable, "r+b")
 
 # patch the aspect ratio
-
+print("Patching aspect ratio...")
 f0.seek(0x3CD0B, os.SEEK_SET)
-f0.write(struct.pack("I", aspectRatio[args.aspectratio]))
+f0.write(struct.pack('I', aspectRatio[args.aspectratio]))
 
 # patch the horizontal resolution
-
+print("Patching horizontal resolution...")
 f0.seek(0xC72CC, os.SEEK_SET)
 
 # Calculate the horizontal resolution from the vertical resolution
-
-f0.write(struct.pack("H",(int(args.veritcalresolution)//3) * 4))
-
+f0.write(struct.pack('I', (int(args.veritcalresolution) // 0x03) * 0x04))
+print("Done!")
 f0.close()
